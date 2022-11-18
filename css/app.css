@@ -10,7 +10,8 @@
     transition: width 500ms;
 }
 
-.controls, .log {
+.controls,
+.log {
     margin-top: 30px;
     text-align: center;
     padding: 10px;
@@ -43,6 +44,11 @@
 .log ul .monster-turn {
     color: red;
     background-color: #ffc0c1;
+}
+
+.log ul .healing-turn {
+    color: green;
+    background-color: #a8efa1;
 }
 
 button {
