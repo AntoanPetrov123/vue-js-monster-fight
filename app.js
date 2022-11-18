@@ -3,7 +3,8 @@ new Vue({
     data: {
         playerHealth: 100,
         monsterHealth: 100,
-        gameIsRunning: false
+        gameIsRunning: false,
+        turns: []
     },
     methods: {
         startGame: function () {
@@ -12,21 +13,35 @@ new Vue({
             this.monsterHealth = 100;
         },
         attack: function () {
-
-            this.monsterHealth -= this.calculateDamage(3, 10);
+            var damage = this.calculateDamage(3, 10);
+            this.monsterHealth -= damage
+            this.turns.unshift({
+                isPlayer: true,
+                message: `You deal ${damage} damage to the monster!`
+            })
             if (this.checkWin()) { return };
 
             this.monsterDamage();
 
         },
         specialAttack: function () {
-            this.monsterHealth -= this.calculateDamage(10, 20);
+            var damage = this.calculateDamage(10, 20);
+            this.monsterHealth -= damage
+            this.turns.unshift({
+                isPlayer: true,
+                message: `You deal ${damage} damage with special attack to the monster!`
+            })
             if (this.checkWin()) { return };
 
             this.monsterDamage();
         },
         heal: function () {
-            this.playerHealth += this.calculateDamage(3, 15);
+            var heal = this.calculateDamage(3, 15);
+            this.playerHealth += heal;
+            this.turns.unshift({
+                isPlayer: true,
+                message: `You restore ${heal}% heal of your health!`
+            })
             if (this.playerHealth > 100) {
                 this.playerHealth = 100;
             }
@@ -34,16 +49,19 @@ new Vue({
         },
         giveUp: function () {
             this.gameIsRunning = false;
-            this.playerHealth = 100;
-            this.monsterHealth = 100;
         },
         calculateDamage: function (min, max) {
             var damage = Math.max(Math.floor(Math.random() * max) + 1, min);
             return damage;
         },
         monsterDamage: function () {
-            this.playerHealth -= this.calculateDamage(5, 12);
+            var damage = this.calculateDamage(5, 12);
+            this.playerHealth -= damage
             this.checkWin();
+            this.turns.unshift({
+                isPlayer: false,
+                message: `Monster did ${damage} damage to you!`
+            })
         },
         checkWin: function () {
             if (this.monsterHealth <= 0) {
